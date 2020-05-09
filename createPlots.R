@@ -1,0 +1,30 @@
+data <- read.delim("household_power_consumption.txt",sep=";",na = c("?"))
+data$Datetime <- as.POSIXct(paste(data$Date, data$Time), format="%d/%m/%Y %H:%M:%S")
+data$Global_active_power <- as.numeric(data$Global_active_power)
+subset = data[data$Datetime < "2007-02-03 00:00:00" & data$Datetime >= "2007-02-01 00:00:00",]
+
+png("plot1.png",width=480,height=480)
+hist(subset$Global_active_power, main="Global Active Power", xlab="Global Active Power (kilowatts)", ylim=c(0,1200), col="red")
+dev.off()
+
+png("plot2.png",width=480,height=480)
+plot(subset$Datetime,subset$Global_active_power,xlab="",ylab="Global Active Power (kilowatts)",type="l")
+dev.off()
+
+png("plot3.png",width=480,height=480)
+plot(subset$Datetime,subset$Sub_metering_1,xlab="",ylab="Energy sub metering",type="l")
+lines(subset$Datetime,subset$Sub_metering_2, col="red")
+lines(subset$Datetime,subset$Sub_metering_3, col="blue")
+legend("topright",c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),lty=1)
+dev.off()
+
+png("plot4.png",width=480,height=480)
+par(mfrow=c(2,2))
+plot(subset$Datetime,subset$Global_active_power,xlab="",ylab="Global Active Power",type="l")
+plot(subset$Datetime,subset$Voltage,xlab="datetime",ylab="Voltage",type="l")
+plot(subset$Datetime,subset$Sub_metering_1,xlab="",ylab="Energy sub metering",type="l")
+lines(subset$Datetime,subset$Sub_metering_2, col="red")
+lines(subset$Datetime,subset$Sub_metering_3, col="blue")
+legend("topright",c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),col=c("black","red","blue"),lty=1)
+plot(subset$Datetime,subset$Global_reactive_power,xlab="datetime",ylab="Global_reactive_power",type="l")
+dev.off()
